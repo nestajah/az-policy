@@ -1,0 +1,31 @@
+apiVersion: templates.gatekeeper.sh/v1
+kind: ConstraintTemplate
+metadata:
+  name: ingresshostnameprefix
+spec:
+  crd:
+    spec:
+      names: 
+        kind: IngressHostnamePrefix
+      validation:
+        # Schema for the `parameters` field
+        openAPIV3Schema:
+          type: object
+          properties:
+            allowedIngressHostnames:
+              type: string
+              items:
+                type: string      
+  targets:
+    - target: admission.k8s.gatekeeper.sh
+      rego: |
+        package ingresshostnameprefix
+
+        violation[{"msg": msg, "details": {"field": "spec.rules.host"}}]{
+
+        input.review.object.kind == "Ingress"
+        hostname := input.review.object.spec.rules[_].host
+        requiredprefix := {prefix | prefix := input.parameters.prefix}
+        not startswith(hostname, "prefix")
+        msg := "Hostname must start with 'prefix'"
+        }

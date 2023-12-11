@@ -1,0 +1,30 @@
+{ 
+  "if": {
+          "field": "type",
+          "in": [
+            "Microsoft.Kubernetes/connectedClusters",
+            "Microsoft.ContainerService/managedClusters"
+          ]
+        },
+        "then": {
+          "effect": "[parameters('effect')]",
+          "details": {
+            "templateInfo": {
+              "sourceType": "PublicURL",
+              "url": ""
+            },
+            "apiGroups": [
+              ""
+            ],
+            "kinds": [
+              "Ingress"
+            ],
+            "excludedNamespaces": "[parameters('excludedNamespaces')]",
+            "namespaces": "[parameters('namespaces')]",
+            "labelSelector": "[parameters('labelSelector')]",
+            "values": {
+              "allowedIngressHostnames": "[parameters('prefix')]"
+            }
+          }
+    }
+}       
