@@ -107,7 +107,7 @@
           }
         },
         "allowedIngressHostnames": {
-          "type": "Array",
+          "type": "String",
           "metadata": {
             "displayName": "Allowed ingress hostnames",
             "description": "Ingress hostname convention for AKS always start for azingress*" ,
