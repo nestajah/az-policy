@@ -25,7 +25,19 @@ spec:
 
         input.review.object.kind == "Ingress"
         hostname := input.review.object.spec.rules[_].host
-        requiredprefix := {prefix | prefix := input.parameters.prefix}
-        not startswith(hostname, "prefix")
-        msg := "Hostname must start with 'prefix'"
+        requiredprefix := input.parameters.allowedIngressHostnames
+        not startswith(hostname, requiredprefix)
+        msg := sprintf("Hostname must start with '%v'", [requiredprefix])
         }
+---
+apiVersion: constraints.gatekeeper.sh/v1beta1
+kind: IngressHostnamePrefix
+metadata:
+  name: ingress-hostname-prefix
+spec:
+  match:
+    kinds:
+      - apiGroups: ["networking.k8s.io"]
+        kinds: ["Ingress"]
+  parameters:
+    allowedIngressHostnames: "azingress"
