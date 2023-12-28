@@ -1,4 +1,4 @@
-apiVersion: templates.gatekeeper.sh/v1beta1
+apiVersion: templates.gatekeeper.sh/v1
 kind: ConstraintTemplate
 metadata:
   name: ingresshostnameprefix
@@ -12,7 +12,7 @@ spec:
         openAPIV3Schema:
           type: object
           properties:
-            allowedIngressHostnames:
+            prefix:
               type: string
               items:
                 type: string      
@@ -25,7 +25,7 @@ spec:
 
         input.review.object.kind == "Ingress"
         hostname := input.review.object.spec.rules[_].host
-        requiredprefix := input.parameters.allowedIngressHostnames
+        requiredprefix := input.parameters.prefix
         not startswith(hostname, requiredprefix)
         msg := sprintf("Hostname must start with '%v'", [requiredprefix])
         }

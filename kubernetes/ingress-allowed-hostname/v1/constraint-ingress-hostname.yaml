@@ -9,4 +9,4 @@ spec:
       - apiGroups: ["networking.k8s.io"]
         kinds: ["Ingress"]
   parameters:
-    allowedIngressHostnames: "azingress"
+    prefix: "azingress"
